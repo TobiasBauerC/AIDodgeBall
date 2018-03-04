@@ -23,14 +23,14 @@ public class StateManager
 
 	public StateManager()
 	{
-		_desiredState = StateDefinition.StateName.NullState;
+		_desiredState = StateDefinition.StateName.Null;
 	}
 
 	public void Update()
 	{
-		StateDefinition.StateName currentState = _currentState != null ? _currentState.GetStateName() : StateDefinition.StateName.NullState;
+		StateDefinition.StateName currentState = _currentState != null ? _currentState.GetStateName() : StateDefinition.StateName.Null;
 
-		if(_desiredState != currentState && _desiredState != StateDefinition.StateName.NullState)
+		if(_desiredState != currentState && _desiredState != StateDefinition.StateName.Null)
 		{
 			BaseState newState = GetState(_desiredState);
 
