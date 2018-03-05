@@ -28,5 +28,27 @@ public class FindTargetState : BaseState
     public override void Update()
     {
         _elapsedTime += Time.deltaTime;
+
+        Transform closestEnemy = GetClosestEnemy();
+        _owner.targetAgent = closestEnemy;
+    }
+
+    private Transform GetClosestEnemy()
+    {
+        Transform closestEnemy = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (AIAgent enemy in _owner.enemyAgents)
+        {
+            float distance = Vector3.Distance(enemy.transform.position, _owner.transform.position);
+
+            if (distance < closestDistance)
+            {
+                closestEnemy = enemy.transform;
+                closestDistance = distance;
+            }
+        }
+
+        return closestEnemy;
     }
 }

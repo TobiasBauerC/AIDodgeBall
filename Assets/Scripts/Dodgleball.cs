@@ -20,6 +20,10 @@ public class Dodgleball : MonoBehaviour
             _rigidbody = GetComponent<Rigidbody>();
 	}
 
+    /// <summary>
+    /// Picks up this ball.
+    /// </summary>
+    /// <param name="parent">Parent.</param>
 	public void PickUp(Transform parent)
     {
         _rigidbody.isKinematic = true;

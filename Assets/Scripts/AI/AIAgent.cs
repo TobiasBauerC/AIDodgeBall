@@ -13,9 +13,11 @@ public class AIAgent : MonoBehaviour
 	[SerializeField] private float _linearSpeed = 5.0f;
 	[SerializeField] private float _angularSpeed = 5.0f;
 	[SerializeField] private List<Dodgleball> _dodgeballs = new List<Dodgleball>();
+    [SerializeField] private List<AIAgent> _enemyAgents = new List<AIAgent>();
 
 	private StateManager _stateManager = null;
 	private Transform _targetBall = null;
+    private Transform _targetAgent = null;
 
     public bool hasBall { get; set; }
 
@@ -24,6 +26,12 @@ public class AIAgent : MonoBehaviour
 		get { return _targetBall; }
 		set { _targetBall = value; }
 	}
+
+    public Transform targetAgent
+    {
+        get { return _targetAgent; }
+        set { _targetAgent = value; }
+    }
 
 	public List<Dodgleball> dodgeballs
 	{
@@ -44,6 +52,27 @@ public class AIAgent : MonoBehaviour
 			return _dodgeballs;
 		}
 	}
+
+    public List<AIAgent> enemyAgents
+    {
+        get
+        {
+            if (_enemyAgents.Count == 0 || _enemyAgents.Contains(null))
+            {
+                _enemyAgents.Clear();
+
+                if (_team == Team.blue)
+                {
+                    foreach (GameObject agent in GameObject.FindGameObjectsWithTag("Red"))
+                    {
+                        _enemyAgents.Add(agent.GetComponent<AIAgent>());
+                    }
+                }
+            }
+
+            return _enemyAgents;
+        }
+    }
 
     private enum Team
     {
@@ -76,6 +105,9 @@ public class AIAgent : MonoBehaviour
         }
 	}
 
+    /// <summary>
+    /// Moves the agent in the given direction.
+    /// </summary>
 	public void MoveForward(Vector3 direction)
 	{
 		if(direction.magnitude != 1.0f)	
@@ -84,16 +116,25 @@ public class AIAgent : MonoBehaviour
 		_rigidbody.velocity = direction * _linearSpeed;
 	}
 
+    /// <summary>
+    /// Rotates the agent clockwise
+    /// </summary>
 	public void TurnRight()
 	{
 		_rigidbody.angularVelocity = transform.up * _angularSpeed;
 	}
 
+    /// <summary>
+    /// Rotates the agent counter clockwise
+    /// </summary>
 	public void TurnLeft()
 	{
 		_rigidbody.angularVelocity = transform.up * _angularSpeed * -1.0f;
 	}
 
+    /// <summary>
+    /// Stops the linear velocity.
+    /// </summary>
 	public void StopLinearVelocity()
 	{
 		Vector3 stopLinearVelocity = _rigidbody.velocity;
@@ -102,17 +143,29 @@ public class AIAgent : MonoBehaviour
 		_rigidbody.velocity = stopLinearVelocity;
 	}
 
+    /// <summary>
+    /// Stops the angular velocity.
+    /// </summary>
 	public void StopAngularVelocity()
 	{
 		_rigidbody.angularVelocity = Vector3.zero;
 	}
 
+    /// <summary>
+    /// Stops all movement.
+    /// </summary>
     public void StopAllMovement()
     {
         StopLinearVelocity();
         StopAngularVelocity();
     }
 
+    /// <summary>
+    /// Gets the direction to target.
+    /// </summary>
+    /// <returns>The direction to target.</returns>
+    /// <param name="start">Start.</param>
+    /// <param name="target">Target.</param>
     public Vector3 GetDirectionToTarget(Vector3 start, Vector3 target)
     {
         return target - start;

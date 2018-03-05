@@ -35,6 +35,10 @@ public class SearchState : BaseState
 		_owner.targetBall = closestBall;
 	}
 
+    /// <summary>
+    /// Gets the closest ball.
+    /// </summary>
+    /// <returns>The closest ball.</returns>
 	private Transform GetClosestBall()
 	{
 		Transform closestBall = null;
