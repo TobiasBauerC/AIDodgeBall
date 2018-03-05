@@ -7,6 +7,7 @@ using UnityEngine;
 public class AIAgent : MonoBehaviour 
 {
 	[SerializeField] private Rigidbody _rigidbody = null;
+    [SerializeField] private Transform _handLocation = null;
 	[Header("Movement")]
 	[SerializeField] private float _linearSpeed = 5.0f;
 	[SerializeField] private float _angularSpeed = 5.0f;
@@ -47,6 +48,8 @@ public class AIAgent : MonoBehaviour
 	{
 		if(!_rigidbody)
 			_rigidbody = GetComponent<Rigidbody>();
+        if (!_handLocation)
+            Debug.LogError("No Hand Location in AIAgent inspector!!");
 
         hasBall = false;
 
@@ -97,8 +100,23 @@ public class AIAgent : MonoBehaviour
 		_rigidbody.angularVelocity = Vector3.zero;
 	}
 
+    public void StopAllMovement()
+    {
+        StopLinearVelocity();
+        StopAngularVelocity();
+    }
+
     public Vector3 GetDirectionToTarget(Vector3 start, Vector3 target)
     {
         return target - start;
     }
+
+	private void OnCollisionEnter(Collision c)
+	{
+        if(c.gameObject.tag == "Ball")
+        {
+            hasBall = true;
+            c.gameObject.GetComponent<Dodgleball>().PickUp(_handLocation);
+        }
+	}
 }

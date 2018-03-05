@@ -16,13 +16,13 @@ public class GetBallState : BaseState
 
 	public override void OnEnter()
 	{
-		Debug.Log("Entering SearchState");
+        Debug.Log("Entering GetBallState");
 		_elapsedTime = 0.0f;
 	}
 
 	public override void OnExit()
 	{
-		Debug.Log("Exiting SearchState");
+        Debug.Log("Exiting GetBallState");
 	}
 
     public override void Update()
@@ -34,6 +34,10 @@ public class GetBallState : BaseState
         if(!_owner.hasBall)
         {
             _owner.MoveForward(direction.normalized);
+        }
+        else
+        {
+            _owner.StopAllMovement();
         }
     }
 }
