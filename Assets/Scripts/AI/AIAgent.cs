@@ -15,6 +15,8 @@ public class AIAgent : MonoBehaviour
 	private StateManager _stateManager = null;
 	private Transform _targetBall = null;
 
+    public bool hasBall { get; set; }
+
 	public Transform targetBall
 	{
 		get { return _targetBall; }
@@ -46,6 +48,8 @@ public class AIAgent : MonoBehaviour
 		if(!_rigidbody)
 			_rigidbody = GetComponent<Rigidbody>();
 
+        hasBall = false;
+
 		_stateManager = new StateManager();
 		_stateManager.AddState(new SearchState(this));
 		_stateManager.AddState(new GetBallState(this));
@@ -55,6 +59,11 @@ public class AIAgent : MonoBehaviour
 	void Update () 
 	{
 		_stateManager.Update();
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            _stateManager.desiredState = StateDefinition.StateName.GetBall;
+        }
 	}
 
 	public void MoveForward(Vector3 direction)
@@ -87,4 +96,9 @@ public class AIAgent : MonoBehaviour
 	{
 		_rigidbody.angularVelocity = Vector3.zero;
 	}
+
+    public Vector3 GetDirectionToTarget(Vector3 start, Vector3 target)
+    {
+        return target - start;
+    }
 }

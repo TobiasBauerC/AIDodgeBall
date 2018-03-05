@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 105076283}
   - component: {fileID: 105076282}
   - component: {fileID: 105076281}
+  - component: {fileID: 105076285}
   - component: {fileID: 105076280}
   m_Layer: 0
   m_Name: AIAgent
@@ -171,6 +172,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a213bcbe02f4b1a92b7d67fea3de24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rigidbody: {fileID: 0}
+  _linearSpeed: 5
+  _angularSpeed: 5
   _dodgeballs: []
 --- !u!23 &105076281
 MeshRenderer:
@@ -240,6 +244,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &105076285
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 105076279}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &194581671
 Prefab:
   m_ObjectHideFlags: 0

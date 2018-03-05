@@ -10,7 +10,7 @@ public class GetBallState : BaseState
 
 	public GetBallState(AIAgent owner)
 	{
-		_stateDefinition.stateName = StateDefinition.StateName.Search;
+        _stateDefinition.stateName = StateDefinition.StateName.GetBall;
 		_owner = owner;
 	}
 
@@ -25,10 +25,15 @@ public class GetBallState : BaseState
 		Debug.Log("Exiting SearchState");
 	}
 
-	public override void Update()
-	{
-		_elapsedTime += Time.deltaTime;
-	}
+    public override void Update()
+    {
+        _elapsedTime += Time.deltaTime;
 
+        Vector3 direction = _owner.GetDirectionToTarget(_owner.transform.position, _owner.targetBall.position);
 
+        if(!_owner.hasBall)
+        {
+            _owner.MoveForward(direction.normalized);
+        }
+    }
 }
