@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class AIAgent : MonoBehaviour 
 {
+    [SerializeField] private Team _team;
 	[SerializeField] private Rigidbody _rigidbody = null;
     [SerializeField] private Transform _handLocation = null;
 	[Header("Movement")]
@@ -43,6 +44,12 @@ public class AIAgent : MonoBehaviour
 			return _dodgeballs;
 		}
 	}
+
+    private enum Team
+    {
+        blue,
+        red
+    }
 
 	void Start () 
 	{

@@ -5,7 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ball
-  - AI
+  - Blue
+  - Red
   layers:
   - Default
   - TransparentFX
