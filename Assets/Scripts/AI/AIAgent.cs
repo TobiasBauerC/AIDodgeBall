@@ -92,17 +92,13 @@ public class AIAgent : MonoBehaviour
 		_stateManager = new StateManager();
 		_stateManager.AddState(new SearchState(this));
 		_stateManager.AddState(new GetBallState(this));
+        _stateManager.AddState(new FindTargetState(this));
 		_stateManager.desiredState = StateDefinition.StateName.Search;
 	}
 
 	void Update () 
 	{
 		_stateManager.Update();
-
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            _stateManager.desiredState = StateDefinition.StateName.GetBall;
-        }
 	}
 
     /// <summary>
@@ -169,6 +165,24 @@ public class AIAgent : MonoBehaviour
     public Vector3 GetDirectionToTarget(Vector3 start, Vector3 target)
     {
         return target - start;
+    }
+
+    public void Controller(int state)
+    {
+        switch(state)
+        {
+            case 1:
+                _stateManager.desiredState = StateDefinition.StateName.Search;
+                break;
+
+            case 2:
+                _stateManager.desiredState = StateDefinition.StateName.GetBall;
+                break;
+
+            case 3:
+                _stateManager.desiredState = StateDefinition.StateName.FindTarget;
+                break;
+        }
     }
 
 	private void OnCollisionEnter(Collision c)

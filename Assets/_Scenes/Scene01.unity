@@ -178,6 +178,8 @@ MonoBehaviour:
   _linearSpeed: 5
   _angularSpeed: 5
   _dodgeballs: []
+  _enemyAgents:
+  - {fileID: 0}
 --- !u!23 &105076281
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -554,6 +556,47 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca580f4143818458b96fc9a1d856d2dd, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &556072666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 556072668}
+  - component: {fileID: 556072667}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &556072667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 556072666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7720914ca2bf94557946d2a0c0143fd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 105076280}
+--- !u!4 &556072668
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 556072666}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.4816214, y: -3.0398083, z: -3.4330711}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &685758491
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,6 +609,7 @@ GameObject:
   - component: {fileID: 685758495}
   - component: {fileID: 685758494}
   - component: {fileID: 685758493}
+  - component: {fileID: 685758492}
   m_Layer: 0
   m_Name: AIAgentRed
   m_TagString: Red
@@ -573,6 +617,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &685758492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 685758491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94a213bcbe02f4b1a92b7d67fea3de24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _team: 1
+  _rigidbody: {fileID: 685758493}
+  _handLocation: {fileID: 1085386089}
+  _linearSpeed: 5
+  _angularSpeed: 5
+  _dodgeballs: []
+  _enemyAgents: []
 --- !u!54 &685758493
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -776,8 +838,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 935050438}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.32373443, y: -0.62528884, z: 0.31912166, w: 0.63432753}
+  m_LocalPosition: {x: 15.774189, y: 23.975937, z: 0.55675817}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
