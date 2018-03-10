@@ -140,7 +140,7 @@ public class Dodgleball : MonoBehaviour
 
     IEnumerator Deactive()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForEndOfFrame();
         active = false;
     }
 }

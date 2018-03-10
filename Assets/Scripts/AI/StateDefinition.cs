@@ -9,7 +9,7 @@ public class StateDefinition
 		Null = -1,
 		GetBall,
 		ThrowBall,
-		Run
+		Hide
 	}
 
 	public StateName stateName { get; set; }
