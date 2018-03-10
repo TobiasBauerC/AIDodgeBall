@@ -5,8 +5,9 @@ using UnityEngine;
 public class GetBallState : BaseState 
 {
 	private AIAgent _owner = null;
-
 	private float _elapsedTime = 0.0f;
+
+    private Dodgleball _lastBall;
 
 	public GetBallState(AIAgent owner)
 	{
@@ -18,26 +19,65 @@ public class GetBallState : BaseState
 	{
         Debug.Log("Entering GetBallState");
 		_elapsedTime = 0.0f;
+        _lastBall = null;
 	}
 
 	public override void OnExit()
 	{
         Debug.Log("Exiting GetBallState");
+        _lastBall = null;
 	}
 
     public override void Update()
     {
         _elapsedTime += Time.deltaTime;
 
-        Vector3 direction = _owner.GetDirectionToTarget(_owner.transform.position, _owner.targetBall.position);
+        Transform closestBall = GetClosestBall();
 
-        if(!_owner.hasBall)
+        _owner.targetBall = closestBall;
+
+        if (_owner.targetBall != null)
         {
-            _owner.MoveForward(direction.normalized);
+            Vector3 direction = _owner.GetDirectionToTarget(_owner.transform.position, _owner.targetBall.position);
+
+            if (!_owner.hasBall)
+            {
+                _owner.MoveForward(direction.normalized);
+                CanGrabBall();
+            }
         }
-        else
+    }
+
+    private Transform GetClosestBall()
+    {
+        Transform closestBall = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Dodgleball ball in _owner.dodgeballs)
         {
-            _owner.StopAllMovement();
+            if (ball.side == _owner.team && ball.active == false)
+            {
+                if (!ball.isHeld)
+                {
+                    float distance = Vector3.Distance(ball.transform.position, _owner.transform.position);
+
+                    if (distance < closestDistance)
+                    {
+                        closestBall = ball.transform;
+                        closestDistance = distance;
+                    }
+                }
+            }
+        }
+
+        return closestBall;
+    }
+
+    private void CanGrabBall()
+    {
+        if(Vector3.Distance(_owner.transform.position, _owner.targetBall.position) < 1.1f)
+        {
+            _owner.PickUpBall();
         }
     }
 }

@@ -7,9 +7,7 @@ public class StateDefinition
 	public enum StateName
 	{
 		Null = -1,
-		Search,
 		GetBall,
-		FindTarget,
 		ThrowBall,
 		Run
 	}

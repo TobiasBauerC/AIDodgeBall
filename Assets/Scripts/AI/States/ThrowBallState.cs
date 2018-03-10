@@ -2,36 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FindTargetState : BaseState
+public class ThrowBallState : BaseState 
 {
-    private AIAgent _owner = null;
+    private AIAgent _owner;
 
     private float _elapsedTime = 0.0f;
 
-    public FindTargetState(AIAgent owner)
+    public ThrowBallState(AIAgent owner)
     {
-        _stateDefinition.stateName = StateDefinition.StateName.FindTarget;
+        _stateDefinition.stateName = StateDefinition.StateName.ThrowBall;
         _owner = owner;
     }
 
-    public override void OnEnter()
-    {
-        Debug.Log("Entering FindTargetState");
+	public override void OnEnter()
+	{
         _elapsedTime = 0.0f;
-    }
+	}
 
-    public override void OnExit()
-    {
-        Debug.Log("Exiting FindTargetState");
-    }
+	public override void OnExit()
+	{
+        Debug.Log("Exiting ThrowBallState");
+	}
 
-    public override void Update()
-    {
+	public override void Update()
+	{
         _elapsedTime += Time.deltaTime;
 
         Transform closestEnemy = GetClosestEnemy();
         _owner.targetAgent = closestEnemy;
-    }
+
+        if(_owner.targetBall && _owner.targetAgent)
+        {
+            _owner.ThrowBall();
+        }
+
+        if(_elapsedTime <= 1.0f)
+        {
+            return;
+        }
+
+        if(_owner.targetBall == null)
+        {
+            _owner.SwitchState(StateDefinition.StateName.GetBall);
+        }
+	}
 
     private Transform GetClosestEnemy()
     {

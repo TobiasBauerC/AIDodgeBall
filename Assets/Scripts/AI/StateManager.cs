@@ -28,9 +28,9 @@ public class StateManager
 
 	public void Update()
 	{
-		StateDefinition.StateName currentState = _currentState != null ? _currentState.GetStateName() : StateDefinition.StateName.Null;
+		StateDefinition.StateName currentTempState = _currentState != null ? _currentState.GetStateName() : StateDefinition.StateName.Null;
 
-		if(_desiredState != currentState && _desiredState != StateDefinition.StateName.Null)
+		if(_desiredState != currentTempState && _desiredState != StateDefinition.StateName.Null)
 		{
 			BaseState newState = GetState(_desiredState);
 

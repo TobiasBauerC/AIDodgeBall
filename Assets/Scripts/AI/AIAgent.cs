@@ -4,22 +4,28 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 
-public class AIAgent : MonoBehaviour 
+public class AIAgent : MonoBehaviour
 {
     [SerializeField] private Team _team;
-	[SerializeField] private Rigidbody _rigidbody = null;
+    [SerializeField] private Rigidbody _rigidbody = null;
     [SerializeField] private Transform _handLocation = null;
-	[Header("Movement")]
-	[SerializeField] private float _linearSpeed = 5.0f;
-	[SerializeField] private float _angularSpeed = 5.0f;
-	[SerializeField] private List<Dodgleball> _dodgeballs = new List<Dodgleball>();
+    [Header("Movement")]
+    [SerializeField] private float _linearSpeed = 5.0f;
+    [SerializeField] private float _angularSpeed = 5.0f;
+    [SerializeField] private List<Dodgleball> _dodgeballs = new List<Dodgleball>();
     [SerializeField] private List<AIAgent> _enemyAgents = new List<AIAgent>();
 
-	private StateManager _stateManager = null;
-	private Transform _targetBall = null;
+    private StateManager _stateManager = null;
+    private Transform _targetBall = null;
     private Transform _targetAgent = null;
+    private bool _running = false;
 
     public bool hasBall { get; set; }
+
+    public Team team
+    {
+        get { return _team; } 
+    }
 
 	public Transform targetBall
 	{
@@ -68,13 +74,20 @@ public class AIAgent : MonoBehaviour
                         _enemyAgents.Add(agent.GetComponent<AIAgent>());
                     }
                 }
+                else if (_team == Team.red)
+                {
+                    foreach (GameObject agent in GameObject.FindGameObjectsWithTag("Blue"))
+                    {
+                        _enemyAgents.Add(agent.GetComponent<AIAgent>());
+                    }
+                }
             }
 
             return _enemyAgents;
         }
     }
 
-    private enum Team
+    public enum Team
     {
         blue,
         red
@@ -90,16 +103,30 @@ public class AIAgent : MonoBehaviour
         hasBall = false;
 
 		_stateManager = new StateManager();
-		_stateManager.AddState(new SearchState(this));
 		_stateManager.AddState(new GetBallState(this));
-        _stateManager.AddState(new FindTargetState(this));
-		_stateManager.desiredState = StateDefinition.StateName.Search;
+        _stateManager.AddState(new ThrowBallState(this));
+        _stateManager.desiredState = StateDefinition.StateName.GetBall;
 	}
 
 	void Update () 
 	{
+        if(Input.GetKeyDown(KeyCode.Space))
+            _running = !_running;
+
+        if (!_running)
+            return;
+
 		_stateManager.Update();
 	}
+
+    /// <summary>
+    /// Switchs the state.
+    /// </summary>
+    /// <param name="state">State.</param>
+    public void SwitchState(StateDefinition.StateName state)
+    {
+        _stateManager.desiredState = state;
+    }
 
     /// <summary>
     /// Moves the agent in the given direction.
@@ -156,41 +183,44 @@ public class AIAgent : MonoBehaviour
         StopAngularVelocity();
     }
 
+    public Vector3 GetVelocity()
+    {
+        return _rigidbody.velocity;
+    }
+
     /// <summary>
     /// Gets the direction to target.
     /// </summary>
-    /// <returns>The direction to target.</returns>
-    /// <param name="start">Start.</param>
-    /// <param name="target">Target.</param>
     public Vector3 GetDirectionToTarget(Vector3 start, Vector3 target)
     {
         return target - start;
     }
 
-    public void Controller(int state)
+    public void ThrowBall()
     {
-        switch(state)
-        {
-            case 1:
-                _stateManager.desiredState = StateDefinition.StateName.Search;
-                break;
+        targetBall.GetComponent<Dodgleball>().Throw(22.22f, 1.0f, targetAgent.GetComponent<AIAgent>());
+        _targetBall = null;
+        _targetAgent = null;
+        hasBall = false;
+    }
 
-            case 2:
-                _stateManager.desiredState = StateDefinition.StateName.GetBall;
-                break;
-
-            case 3:
-                _stateManager.desiredState = StateDefinition.StateName.FindTarget;
-                break;
-        }
+    public void PickUpBall()
+    {
+        StopAllMovement();
+        SwitchState(StateDefinition.StateName.ThrowBall);
+        targetBall.GetComponent<Dodgleball>().PickUp(_handLocation);
+        targetBall.GetComponent<Dodgleball>().isHeld = true;
+        hasBall = true;
     }
 
 	private void OnCollisionEnter(Collision c)
 	{
         if(c.gameObject.tag == "Ball")
         {
-            hasBall = true;
-            c.gameObject.GetComponent<Dodgleball>().PickUp(_handLocation);
+            Dodgleball ball = c.gameObject.GetComponent<Dodgleball>();
+
+            if (ball.active == true)
+                Destroy(gameObject);
         }
 	}
 }
