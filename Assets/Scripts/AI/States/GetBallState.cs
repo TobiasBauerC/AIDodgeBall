@@ -17,14 +17,12 @@ public class GetBallState : BaseState
 
 	public override void OnEnter()
 	{
-        Debug.Log("Entering GetBallState");
 		_elapsedTime = 0.0f;
         _lastBall = null;
 	}
 
 	public override void OnExit()
 	{
-        Debug.Log("Exiting GetBallState");
         _lastBall = null;
 	}
 

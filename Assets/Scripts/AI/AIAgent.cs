@@ -14,6 +14,9 @@ public class AIAgent : MonoBehaviour
     [SerializeField] private float _angularSpeed = 5.0f;
     [SerializeField] private List<Dodgleball> _dodgeballs = new List<Dodgleball>();
     [SerializeField] private List<AIAgent> _enemyAgents = new List<AIAgent>();
+    [Header("Location")]
+    [SerializeField] private Transform _blueSide;
+    [SerializeField] private Transform _redSide;
 
     private StateManager _stateManager = null;
     private Transform _targetBall = null;
@@ -105,6 +108,7 @@ public class AIAgent : MonoBehaviour
 		_stateManager = new StateManager();
 		_stateManager.AddState(new GetBallState(this));
         _stateManager.AddState(new ThrowBallState(this));
+        _stateManager.AddState(new HideState(this));
         _stateManager.desiredState = StateDefinition.StateName.GetBall;
 	}
 
@@ -122,7 +126,6 @@ public class AIAgent : MonoBehaviour
     /// <summary>
     /// Switchs the state.
     /// </summary>
-    /// <param name="state">State.</param>
     public void SwitchState(StateDefinition.StateName state)
     {
         _stateManager.desiredState = state;
@@ -185,7 +188,12 @@ public class AIAgent : MonoBehaviour
 
     public Vector3 GetVelocity()
     {
-        return _rigidbody.velocity;
+        Vector3 slightlyOffVelocity = _rigidbody.velocity;
+        float slightAdjustment = Random.Range(-2.0f, 2.0f);
+
+        slightlyOffVelocity *= slightAdjustment;
+
+        return slightlyOffVelocity;
     }
 
     /// <summary>
@@ -211,6 +219,22 @@ public class AIAgent : MonoBehaviour
         targetBall.GetComponent<Dodgleball>().PickUp(_handLocation);
         targetBall.GetComponent<Dodgleball>().isHeld = true;
         hasBall = true;
+    }
+
+    public bool OnMySide(Vector3 position)
+    {
+        if(Vector3.Distance(position, _blueSide.position) < Vector3.Distance(position, _redSide.position))
+        {
+            if (team == Team.blue)
+                return true;
+           
+            return false;
+        }
+
+        if (team == Team.blue)
+            return false;
+                
+        return true;
     }
 
 	private void OnCollisionEnter(Collision c)
