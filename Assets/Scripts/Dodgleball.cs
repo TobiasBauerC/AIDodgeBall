@@ -54,9 +54,20 @@ public class Dodgleball : MonoBehaviour
         active = false;
 	}
 
-    /// <summary>
-    /// Picks up this ball.
-    /// </summary>
+	private void LateUpdate()
+	{
+        if(transform.position.y <= -1.0f)
+        {
+            Vector3 pos = transform.position;
+            pos.y = 1.0f;
+
+            transform.position = pos;
+        }
+	}
+
+	/// <summary>
+	/// Picks up this ball.
+	/// </summary>
 	public void PickUp(Transform parent)
     {
         _collider.enabled = false;
