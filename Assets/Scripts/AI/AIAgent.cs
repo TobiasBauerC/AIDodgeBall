@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
 
@@ -212,7 +213,14 @@ public class AIAgent : MonoBehaviour
     /// </summary>
     public Vector3 GetDirectionToTarget(Vector3 start, Vector3 target)
     {
-        return target - start;
+        NavMeshPath path = new NavMeshPath();
+        bool isSuccess = NavMesh.CalculatePath(start, target, NavMesh.AllAreas, path);
+        if (isSuccess)
+        {
+            return target - start;
+        }
+
+        return Vector3.zero;
     }
 
     public void ThrowBall()

@@ -57,6 +57,13 @@ public class Dodgleball : MonoBehaviour
         if (!_collider)
             _collider = GetComponent<Collider>();
 
+        Vector3 newPos = Vector3.zero;
+        newPos.x = Random.Range(-16.0f, 16.0f);
+        newPos.z = Random.Range(-24.0f, 24.0f);
+        newPos.y = 1.0f;
+
+        transform.position = newPos;
+
         active = false;
 	}
 
