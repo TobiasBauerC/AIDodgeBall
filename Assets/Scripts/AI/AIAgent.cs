@@ -9,6 +9,7 @@ public class AIAgent : MonoBehaviour
     [SerializeField] private Team _team;
     [SerializeField] private Rigidbody _rigidbody = null;
     [SerializeField] private Transform _handLocation = null;
+    [SerializeField] private LayerMask _agentMask;
     [Header("Movement")]
     [SerializeField] private float _linearSpeed = 5.0f;
     [SerializeField] private float _angularSpeed = 5.0f;
@@ -28,6 +29,11 @@ public class AIAgent : MonoBehaviour
     public Team team
     {
         get { return _team; } 
+    }
+
+    public LayerMask agentMask
+    {
+        get { return _agentMask; }
     }
 
 	public Transform targetBall
@@ -114,14 +120,19 @@ public class AIAgent : MonoBehaviour
 
 	void Update () 
 	{
-        if(Input.GetKeyDown(KeyCode.Space))
-            _running = !_running;
-
         if (!_running)
+        {
+            StopAllMovement();
             return;
+        }
 
 		_stateManager.Update();
 	}
+
+    public void ActivateAgent()
+    {
+        _running = !_running;
+    }
 
     /// <summary>
     /// Switchs the state.
@@ -206,7 +217,7 @@ public class AIAgent : MonoBehaviour
 
     public void ThrowBall()
     {
-        targetBall.GetComponent<Dodgleball>().Throw(22.22f, 1.0f, targetAgent.GetComponent<AIAgent>());
+        targetBall.GetComponent<Dodgleball>().Throw(22.22f, 1.0f, targetAgent.GetComponent<AIAgent>(), this);
         _targetBall = null;
         _targetAgent = null;
         hasBall = false;
@@ -243,8 +254,29 @@ public class AIAgent : MonoBehaviour
         {
             Dodgleball ball = c.gameObject.GetComponent<Dodgleball>();
 
-            if (ball.active == true)
-                Destroy(gameObject);
+            if (ball.active == true && ball.thrower.team != _team)
+            {
+                int catchBall = (int) Random.Range(1.0f, 5.0f);
+
+                if(catchBall == 1)
+                {
+                    _targetBall = ball.transform;
+                    PickUpBall();
+
+                    switch(_team)
+                    {
+                        case Team.blue:
+                            GameManager.instance.AddScore(Team.blue, 1);
+                            break;
+
+                        case Team.red:
+                            GameManager.instance.AddScore(Team.red, 1);
+                            break;
+                    }
+                }
+                else
+                    Destroy(gameObject);
+            }
         }
 	}
 }

@@ -14,8 +14,14 @@ public class Dodgleball : MonoBehaviour
     // Throwing ball vars:
     private float _minSpeed;
     private AIAgent _movingTarget = null;
+    private AIAgent _thrower = null;
     private float _desiredAirTime = 1.0f;
     //
+
+    public AIAgent thrower
+    {
+        get { return _thrower; }
+    }
 
 	public bool isHeld
 	{
@@ -76,13 +82,14 @@ public class Dodgleball : MonoBehaviour
         transform.parent = parent;
     }
 
-    public void Throw(float minSpeed, float desiredAirTime, AIAgent movingTarget)
+    public void Throw(float minSpeed, float desiredAirTime, AIAgent movingTarget, AIAgent thrower)
     {
         _collider.enabled = true;
         active = true;
         _minSpeed = minSpeed;
         _desiredAirTime = desiredAirTime;
         _movingTarget = movingTarget;
+        _thrower = thrower;
 
         _rigidbody.isKinematic = false;
         transform.parent = null;

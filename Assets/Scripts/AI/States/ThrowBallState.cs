@@ -7,7 +7,6 @@ public class ThrowBallState : BaseState
     private AIAgent _owner;
 
     private float _elapsedTime = 0.0f;
-    private float _checkTime = 0.0f;
 
     public ThrowBallState(AIAgent owner)
     {
@@ -18,7 +17,6 @@ public class ThrowBallState : BaseState
 	public override void OnEnter()
 	{
         _elapsedTime = 0.0f;
-        _checkTime = Random.Range(0.1f, 1.0f);
 	}
 
 	public override void OnExit()
@@ -36,9 +34,6 @@ public class ThrowBallState : BaseState
         {
             _owner.ThrowBall();
         }
-
-        if (_elapsedTime <= _checkTime)
-            return;
 
         if(_owner.targetBall == null)
         {
