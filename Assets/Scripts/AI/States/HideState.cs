@@ -35,6 +35,9 @@ public class HideState : BaseState
             _owner.SwitchState(StateDefinition.StateName.GetBall);
         }
 
+        if(CloseBall())
+            _owner.SwitchState(StateDefinition.StateName.GetBall);
+
         // if at position, go to a different one //
         if (Vector3.Distance(_targetLocation, _owner.transform.position) < 0.3f)
             _targetLocation = GetNewLocation();
@@ -56,5 +59,30 @@ public class HideState : BaseState
             return GetNewLocation();
 
         return newLocation;
+    }
+
+    private bool CloseBall()
+    {
+        Transform closestBall = null;
+        float closestDistance = 5.0f;
+
+        foreach (Dodgleball ball in _owner.dodgeballs)
+        {
+            if (ball.side == _owner.team && ball.active == false)
+            {
+                if (!ball.isHeld)
+                {
+                    float distance = Vector3.Distance(ball.transform.position, _owner.transform.position);
+
+                    if (distance < closestDistance)
+                    {
+                        closestBall = ball.transform;
+                        closestDistance = distance;
+                    }
+                }
+            }
+        }
+
+        return closestBall == null ? false : true;
     }
 }

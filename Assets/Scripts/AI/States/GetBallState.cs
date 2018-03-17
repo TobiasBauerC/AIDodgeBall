@@ -31,6 +31,8 @@ public class GetBallState : BaseState
         _elapsedTime += Time.deltaTime;
 
         Transform closestBall = GetClosestBall();
+        if (closestBall == null)
+            _owner.SwitchState(StateDefinition.StateName.Hide);
 
         _owner.targetBall = closestBall;
 
