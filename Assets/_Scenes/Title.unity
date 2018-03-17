@@ -454,8 +454,9 @@ MonoBehaviour:
     Ball Throw:\n- Use left and right keys to switch targets. \n- Press space to throw
     ball\n- If the slider is before the green, the ball will fall short.\n- If the
     ball is after the green, the ball will be thrown too far.\n- If the ball is thrown
-    during green, it will PROBABLY hit its mark.\n*TIP* \nIf the target is about to
-    switch directions when you throw your ball, you might miss!"
+    during green, it will PROBABLY hit its mark.\n- If the ball hits a target that
+    was not its target, you will lose that targets value of points.\n*TIP* \nIf the
+    target is about to switch directions when you throw your ball, you might miss!"
 --- !u!222 &658154420
 CanvasRenderer:
   m_ObjectHideFlags: 0
