@@ -220,6 +220,8 @@ public class AIAgent : MonoBehaviour
             return target - start;
         }
 
+        _stateManager.desiredState = StateDefinition.StateName.Hide;
+
         return Vector3.zero;
     }
 
