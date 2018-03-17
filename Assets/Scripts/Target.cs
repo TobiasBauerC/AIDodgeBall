@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Target : MonoBehaviour 
 {
+    [SerializeField] private int _scoreValue;
     private Rigidbody _rigidbody;
+
+    public int scoreValue { get { return _scoreValue; } }
 
 	// Use this for initialization
 	void Start () 

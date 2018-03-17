@@ -22,7 +22,6 @@ public class HorizontalMover : MonoBehaviour
 
         if ((transform.position.x <= _minX && _speed <= -0.1f) || (transform.position.x >= _maxX && _speed >= 0.1f))
         {
-            Debug.Log("Stucl");
             _speed *= -1.0f;
         }
     }

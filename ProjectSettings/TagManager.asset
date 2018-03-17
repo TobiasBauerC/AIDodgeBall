@@ -8,6 +8,7 @@ TagManager:
   - Blue
   - Red
   - Floor
+  - Target
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Middle
   - Ball
   - Agents
-  - 
+  - Baseball
   - 
   - 
   - 

@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Baseball : MonoBehaviour 
 {
-
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Collider _collider;
+
+    private Player _player;
 
     // Throwing ball vars:
     private float _minSpeed;
     private Target _movingTarget = null;
     private float _desiredAirTime = 1.0f;
+    private float _verticalMod = 0.0f;
     //
 
     private void Start()
@@ -41,12 +43,14 @@ public class Baseball : MonoBehaviour
     /// <summary>
     /// Throw the ball.
     /// </summary>
-    public void Throw(float minSpeed, float desiredAirTime, Target movingTarget)
+    public void Throw(float minSpeed, float desiredAirTime, float verticalMod, Target movingTarget, Player player)
     {
         _collider.enabled = true;
         _minSpeed = minSpeed;
         _desiredAirTime = desiredAirTime;
+        _verticalMod = verticalMod;
         _movingTarget = movingTarget;
+        _player = player;
 
         _rigidbody.isKinematic = false;
         transform.parent = null;
@@ -73,7 +77,7 @@ public class Baseball : MonoBehaviour
     Vector3 CalculateInitialVelocity(Vector3 targetPosition, bool useDesiredTime)
     {
         Vector3 displacement = targetPosition - this.transform.position;
-        float yDisplacement = displacement.y;
+        displacement.y += _verticalMod;
         //displacement.y = 0.0f;
         float horizontalDisplacement = displacement.magnitude;
         if (horizontalDisplacement < Mathf.Epsilon)
@@ -106,4 +110,21 @@ public class Baseball : MonoBehaviour
         Vector3 initialHorizontalVelocity = displacement * horizontalSpeed;
         return initialHorizontalVelocity + initialYVelocity;
     }
+
+	private void OnCollisionEnter(Collision c)
+	{
+        if(c.gameObject.tag == "Target")
+        {
+            Target target = c.gameObject.GetComponent<Target>();
+            if(target == _movingTarget)
+            {
+                _player.ChangeScore(target.scoreValue);
+                _player.TargetHit(target);
+            }
+            else
+            {
+                _player.ChangeScore(-target.scoreValue);
+            }
+        }
+	}
 }
